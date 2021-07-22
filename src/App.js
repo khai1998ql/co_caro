@@ -7,8 +7,8 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {
-      number : 20,
-      mangCaro : Array(49).fill(null),
+      number : 10,
+      mangCaro : Array(100).fill(null),
       defaultPlayer : 'X',
       isFinal : false,
       winner : '',
@@ -56,24 +56,40 @@ class App extends Component {
   }
   resetTable = () => {
     this.setState({
-      number : 7,
-      mangCaro : Array(49).fill(null),
+      number : 10,
+      mangCaro : Array(100).fill(null),
+      defaultPlayer : 'X',
+      isFinal : false,
+      winner : '',
+    })
+  }
+  onChangeTable = (event) => {
+    var value = parseInt(event.target.value);
+    this.setState({
+      number : value,
+      mangCaro : Array(value*value).fill(null),
       defaultPlayer : 'X',
       isFinal : false,
       winner : '',
     })
   }
   titleGame = () => {
-    const { defaultPlayer, isFinal, winner } = this.state;
+    const { defaultPlayer, isFinal, winner, number } = this.state;
     var result = null;
     if(isFinal == false){
       result = <div className="flex alert alert-primary">
         <div className="">Người chơi tiếp theo: <span className="badge bg-danger">{ defaultPlayer }</span></div>
+        <div>
+          Nhập số cột : <input type="number" min={3} value={number} onChange={ this.onChangeTable }></input>
+        </div>
         <button className="btn btn-success btn-sm" onClick={ this.resetTable }>Reset</button>
       </div>
     }else{
       result = <div className="flex alert alert-primary">
         <div className="">Người chơi chiến thằng <span className="badge bg-danger">{ winner }</span></div>
+        <div>
+          Nhập số cột : <input type="number" min={3} value={number} onChange={ this.onChangeTable }></input>
+        </div>
         <button className="btn btn-success btn-sm" onClick={ this.resetTable }>Reset</button>
       </div>
     }
