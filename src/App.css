@@ -75,3 +75,7 @@ html{
   display: flex;
   justify-content: space-between;
 }
+.active_element {
+  color : red;
+  background-color: pink;
+}

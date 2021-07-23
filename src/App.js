@@ -12,11 +12,11 @@ class App extends Component {
       defaultPlayer : 'X',
       isFinal : false,
       winner : '',
+      activeElement : Array(5).fill(null)
     }
   }
   numberClick = (number) => {
     var { mangCaro, isFinal } = this.state;
-    var number = parseInt(number);
     var currentValue = mangCaro[number];
     if(currentValue == null && isFinal == false){
       var player = this.state.defaultPlayer;
@@ -27,31 +27,71 @@ class App extends Component {
         mangCaro : mangCaro,
         defaultPlayer : nextPlayer
       })
-      this.checkWin();
+      
     }
+    this.checkWin();
   }
   checkWin = () => {
     var number = parseInt(this.state.number);
-    const { mangCaro, isFinal } = this.state;
+    const { mangCaro, activeElement } = this.state;
     var result = false;
     var winner = '';
     for(var i = 0; i < number; i++){
       for(var j = 0; j < number; j++){
         if((mangCaro[(i+0)*number+j] == mangCaro[(i+1)*number+j] && mangCaro[(i+0)*number+j] == mangCaro[(i+2)*number+j] && mangCaro[(i+0)*number+j] == mangCaro[(i+3)*number+j] && mangCaro[(i+0)*number+j] == mangCaro[(i+4)*number+j] && mangCaro[(i+0)*number+j] != null) 
-        || (mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+1] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+2] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+3] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+4] && mangCaro[(i*number)+j+0] != null)
-        || (mangCaro[((i+0)*number)+j+0] == mangCaro[((i+1)*number)+j+1] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+2)*number)+j+2] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+3)*number)+j+3] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+4)*number)+j+4] && mangCaro[((i+0)*number)+j+0] != null)
-        || (mangCaro[((i+0)*number)+(j-0)] == mangCaro[((i+1)*number)+(j-1)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+2)*number)+(j-2)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+3)*number)+(j-3)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+4)*number)+(j-4)] && mangCaro[((i+0)*number)+(j+0)] != null && (j >= 4))
+        // || (mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+1] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+2] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+3] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+4] && mangCaro[(i*number)+j+0] != null)
+        // || (mangCaro[((i+0)*number)+j+0] == mangCaro[((i+1)*number)+j+1] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+2)*number)+j+2] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+3)*number)+j+3] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+4)*number)+j+4] && mangCaro[((i+0)*number)+j+0] != null)
+        // || (mangCaro[((i+0)*number)+(j-0)] == mangCaro[((i+1)*number)+(j-1)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+2)*number)+(j-2)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+3)*number)+(j-3)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+4)*number)+(j-4)] && mangCaro[((i+0)*number)+(j+0)] != null && (j >= 4))
         ){
           result = true;
           winner = mangCaro[(i+0)*number+j];
+          for(var k = 0; k < 5; k++){
+            activeElement[k] = (i+k)*number+j;
+          }
+          this.setState({
+            activeElement : activeElement
+          })
+        }else if(mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+1] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+2] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+3] && mangCaro[(i*number)+j+0] == mangCaro[(i*number)+j+4] && mangCaro[(i*number)+j+0] != null){
+          result = true;
+          winner = mangCaro[(i+0)*number+j];
+          for(var k = 0; k < 5; k++){
+            activeElement[k] = (i)*number+(j+k);
+          }
+          this.setState({
+            activeElement : activeElement
+          })
+        }else if(mangCaro[((i+0)*number)+j+0] == mangCaro[((i+1)*number)+j+1] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+2)*number)+j+2] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+3)*number)+j+3] && mangCaro[((i+0)*number)+j+0] == mangCaro[((i+4)*number)+j+4] && mangCaro[((i+0)*number)+j+0] != null){
+          result = true;
+          winner = mangCaro[(i+0)*number+j];
+          for(var k = 0; k < 5; k++){
+            activeElement[k] = (i+k)*number+(j+k);
+          }
+          this.setState({
+            activeElement : activeElement
+          })
+        }else if(mangCaro[((i+0)*number)+(j-0)] == mangCaro[((i+1)*number)+(j-1)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+2)*number)+(j-2)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+3)*number)+(j-3)] && mangCaro[((i+0)*number)+(j+0)] == mangCaro[((i+4)*number)+(j-4)] && mangCaro[((i+0)*number)+(j+0)] != null && (j >= 4)){
+          result = true;
+          winner = mangCaro[(i+0)*number+j];
+          for(var k = 0; k < 5; k++){
+            activeElement[k] = (i+k)*number+(j-k);
+          }
+          this.setState({
+            activeElement : activeElement
+          })
         }
         
       }
     }
-    this.setState({
-      isFinal : result,
-      winner : winner
-    })
+    if(result){
+      this.setState({
+        isFinal : result,
+        winner : winner,
+        alertStatus : true
+      })
+      console.log(activeElement);
+      // alert('Người chơi chiến thắng: ' + winner);
+    }
+    
     
   }
   resetTable = () => {
@@ -61,6 +101,7 @@ class App extends Component {
       defaultPlayer : 'X',
       isFinal : false,
       winner : '',
+      activeElement : Array(5).fill(null)
     })
   }
   onChangeTable = (event) => {
@@ -71,6 +112,7 @@ class App extends Component {
       defaultPlayer : 'X',
       isFinal : false,
       winner : '',
+      activeElement : Array(5).fill(null)
     })
   }
   titleGame = () => {
@@ -96,14 +138,15 @@ class App extends Component {
     return result;
   }
   render(){
-    var { number, mangCaro } = this.state;
+    var { number, mangCaro, activeElement } = this.state;
     var rowArray = new Array();
     for(var i = 0; i < number; i++){
       rowArray[i] = i;
     }
+    
     var rowArrayContent = rowArray.map((row, index) => {
       let result = '';
-      result = <RowArray key={index} numberClick={ this.numberClick } rowNumber={row} number={number} mangCaro={mangCaro} />
+      result = <RowArray key={index} numberClick={ this.numberClick } activeElement={activeElement} rowNumber={row} number={number} mangCaro={mangCaro} />
       return result;
     })
     return (
